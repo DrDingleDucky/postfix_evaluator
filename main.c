@@ -7,26 +7,26 @@
 #define MAX_SIZE 256
 
 int stack[MAX_SIZE];
-int top = 1;
+int top = -1;
 
-bool isFull(int *top) { return *top == MAX_SIZE; }
+bool isFull() { return top == MAX_SIZE - 1; }
 
-bool isEmpty(int *top) { return *top == -1; }
+bool isEmpty() { return top == -1; }
 
-void push(int stack[], int *top, int x) {
-  if (isFull(top)) {
-    printf("there is not space left in the stack\n");
+void push(int x) {
+  if (isFull()) {
+    printf("stack overflow\n");
     exit(1);
   }
-  stack[++*top] = x;
+  stack[++top] = x;
 }
 
-int pop(int stack[], int *top) {
-  if (isEmpty(top)) {
-    printf("nothing to take from the stack\n");
+int pop() {
+  if (isEmpty()) {
+    printf("stack underflow\n");
     exit(1);
   }
-  return stack[(*top)--];
+  return stack[top--];
 }
 
 struct Node {
@@ -51,52 +51,52 @@ void addNode(struct Node **head, char *newData) {
 }
 
 bool isOperator(char operator) {
-  if (operator== '+')
+  switch (operator) {
+  case '+':
     return true;
-  else if (operator== '-')
+  case '-':
     return true;
-  else if (operator== '*')
+  case '*':
     return true;
-  else if (operator== '/')
+  case '/':
     return true;
-  else
-    return false;
+  }
 }
 
-int evaluator(int num1, char operator, int num2) {
-  int result;
-  if (operator== '+')
+int evaluate(int num1, char operator, int num2) {
+  switch (operator) {
+  case '+':
     return num1 + num2;
-  else if (operator== '-')
+  case '-':
     return num1 - num2;
-  else if (operator== '*')
+  case '*':
     return num1 * num2;
-  else if (operator== '/')
+  case '/':
     return num1 / num2;
+  }
 }
 
-int postfixEvaluator(struct Node *head) {
+void postfixEvaluator(struct Node *head) {
   struct Node *current = head;
-  int i;
   while (current != NULL) {
     if (isalnum(*current->data) ||
-        current->data[0] == '-' && strlen(current->data) != 1) {
+        (current->data[0] == '-' && strlen(current->data) > 1)) {
       int num = atoi(current->data);
-      push(stack, &top, num);
+      push(num);
     } else if (isOperator(*current->data)) {
-      int num2 = pop(stack, &top);
-      int num1 = pop(stack, &top);
-      push(stack, &top, evaluator(num1, *current->data, num2));
+      int num2 = pop();
+      int num1 = pop();
+      push(evaluate(num1, *current->data, num2));
     }
     current = current->next;
   }
-  printf("output: %d\n", pop(stack, &top));
+  printf("Output: %d\n", pop());
 }
 
 int main() {
   struct Node *head = NULL;
   char input[MAX_SIZE];
-  char tempString[16];
+  char tempString[MAX_SIZE];
 
   printf("input: ");
   fgets(input, MAX_SIZE, stdin);
