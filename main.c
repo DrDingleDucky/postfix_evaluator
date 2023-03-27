@@ -29,20 +29,21 @@ int pop() {
   return stack[top--];
 }
 
-struct Node {
+typedef struct node {
   char *data;
-  struct Node *next;
-};
+  struct node *next;
+} node;
 
-void addNode(struct Node **head, char *newData) {
-  struct Node *newNode = (struct Node *)malloc(sizeof(struct Node));
-  newNode->data = strdup(newData);
+void addNode(node **head, char *data) {
+  node *newNode = malloc(sizeof(node));
+  newNode->data = malloc(strlen(data));
+  strcpy(newNode->data, data);
   newNode->next = NULL;
 
   if (*head == NULL) {
     *head = newNode;
   } else {
-    struct Node *current = *head;
+    node *current = *head;
     while (current->next != NULL) {
       current = current->next;
     }
@@ -76,8 +77,8 @@ int evaluate(int num1, char operator, int num2) {
   }
 }
 
-void postfixEvaluator(struct Node *head) {
-  struct Node *current = head;
+void postfixEvaluator(node *head) {
+  node *current = head;
   while (current != NULL) {
     if (isalnum(*current->data) ||
         (current->data[0] == '-' && strlen(current->data) > 1)) {
@@ -94,7 +95,7 @@ void postfixEvaluator(struct Node *head) {
 }
 
 int main() {
-  struct Node *head = NULL;
+  node *head = NULL;
   char input[MAX_SIZE];
   char tempString[MAX_SIZE];
 
