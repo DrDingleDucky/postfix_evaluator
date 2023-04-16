@@ -14,107 +14,107 @@ bool isFull() { return top == MAX_SIZE - 1; }
 bool isEmpty() { return top == -1; }
 
 void push(int x) {
-  if (isFull()) {
-    printf("stack overflow\n");
-    exit(1);
-  }
-  stack[++top] = x;
+    if (isFull()) {
+        printf("stack overflow\n");
+        exit(1);
+    }
+    stack[++top] = x;
 }
 
 int pop() {
-  if (isEmpty()) {
-    printf("stack underflow\n");
-    exit(1);
-  }
-  return stack[top--];
+    if (isEmpty()) {
+        printf("stack underflow\n");
+        exit(1);
+    }
+    return stack[top--];
 }
 
 typedef struct node {
-  char *data;
-  struct node *next;
+    char *data;
+    struct node *next;
 } node;
 
 void addNode(node **head, char *data) {
-  node *newNode = malloc(sizeof(node));
-  newNode->data = malloc(strlen(data));
-  strcpy(newNode->data, data);
-  newNode->next = NULL;
+    node *newNode = malloc(sizeof(node));
+    newNode->data = malloc(strlen(data));
+    strcpy(newNode->data, data);
+    newNode->next = NULL;
 
-  if (*head == NULL) {
-    *head = newNode;
-  } else {
-    node *current = *head;
-    while (current->next != NULL) {
-      current = current->next;
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        node *current = *head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
     }
-    current->next = newNode;
-  }
 }
 
 bool isOperator(char operator) {
-  switch (operator) {
-  case '+':
-    return true;
-  case '-':
-    return true;
-  case '*':
-    return true;
-  case '/':
-    return true;
-  }
+    switch (operator) {
+        case '+':
+            return true;
+        case '-':
+            return true;
+        case '*':
+            return true;
+        case '/':
+            return true;
+    }
 }
 
 int evaluate(int num1, char operator, int num2) {
-  switch (operator) {
-  case '+':
-    return num1 + num2;
-  case '-':
-    return num1 - num2;
-  case '*':
-    return num1 * num2;
-  case '/':
-    return num1 / num2;
-  }
+    switch (operator) {
+        case '+':
+            return num1 + num2;
+        case '-':
+            return num1 - num2;
+        case '*':
+            return num1 * num2;
+        case '/':
+            return num1 / num2;
+    }
 }
 
 void postfixEvaluator(node *head) {
-  node *current = head;
-  while (current != NULL) {
-    if (isalnum(*current->data) ||
-        (current->data[0] == '-' && strlen(current->data) > 1)) {
-      int num = atoi(current->data);
-      push(num);
-    } else if (isOperator(*current->data)) {
-      int num2 = pop();
-      int num1 = pop();
-      push(evaluate(num1, *current->data, num2));
+    node *current = head;
+    while (current != NULL) {
+        if (isalnum(*current->data) ||
+            (current->data[0] == '-' && strlen(current->data) > 1)) {
+            int num = atoi(current->data);
+            push(num);
+        } else if (isOperator(*current->data)) {
+            int num2 = pop();
+            int num1 = pop();
+            push(evaluate(num1, *current->data, num2));
+        }
+        current = current->next;
     }
-    current = current->next;
-  }
-  printf("Output: %d\n", pop());
+    printf("Output: %d\n", pop());
 }
 
 int main() {
-  node *head = NULL;
-  char input[MAX_SIZE];
-  char tempString[MAX_SIZE];
+    node *head = NULL;
+    char input[MAX_SIZE];
+    char tempString[MAX_SIZE];
 
-  printf("input: ");
-  fgets(input, MAX_SIZE, stdin);
+    printf("input: ");
+    fgets(input, MAX_SIZE, stdin);
 
-  int i = 0;
-  int j = 0;
-  while (input[i] != '\0') {
-    if (isspace(input[i])) {
-      tempString[j++] = '\0';
-      addNode(&head, tempString);
-      j = 0;
-    } else {
-      tempString[j++] = input[i];
+    int i = 0;
+    int j = 0;
+    while (input[i] != '\0') {
+        if (isspace(input[i])) {
+            tempString[j++] = '\0';
+            addNode(&head, tempString);
+            j = 0;
+        } else {
+            tempString[j++] = input[i];
+        }
+        i++;
     }
-    i++;
-  }
 
-  postfixEvaluator(head);
-  return 0;
+    postfixEvaluator(head);
+    return 0;
 }
