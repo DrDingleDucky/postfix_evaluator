@@ -2,7 +2,7 @@
 
 Evaluate postfix expression.
 
-## Example
+## Examples
 
 ```text
 input: 10 5 +
