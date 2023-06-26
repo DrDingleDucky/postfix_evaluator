@@ -128,21 +128,21 @@ int main()
     printf("input: ");
     fgets(input, MAX_SIZE, stdin);
 
-    int i = 0;
-    int j = 0;
-    while (input[i] != '\0')
+    int index1 = 0;
+    int index2 = 0;
+    while (input[index1] != '\0')
     {
-        if (isspace(input[i]))
+        if (isspace(input[index1]))
         {
-            tempString[j++] = '\0';
+            tempString[index2++] = '\0';
             addNode(&head, tempString);
-            j = 0;
+            index2 = 0;
         }
         else
         {
-            tempString[j++] = input[i];
+            tempString[index2++] = input[index1];
         }
-        i++;
+        index1++;
     }
 
     postfixEvaluator(head);
