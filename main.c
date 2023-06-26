@@ -9,81 +9,107 @@
 int stack[MAX_SIZE];
 int top = -1;
 
-bool isFull() { return top == MAX_SIZE - 1; }
+bool isFull()
+{
+    return top == MAX_SIZE - 1;
+}
 
-bool isEmpty() { return top == -1; }
+bool isEmpty()
+{
+    return top == -1;
+}
 
-void push(int x) {
-    if (isFull()) {
+void push(int x)
+{
+    if (isFull())
+    {
         printf("stack overflow\n");
         exit(1);
     }
     stack[++top] = x;
 }
 
-int pop() {
-    if (isEmpty()) {
+int pop()
+{
+    if (isEmpty())
+    {
         printf("stack underflow\n");
         exit(1);
     }
     return stack[top--];
 }
 
-typedef struct node {
+typedef struct node
+{
     char *data;
     struct node *next;
 } node;
 
-void addNode(node **head, char *data) {
+void addNode(node **head, char *data)
+{
     node *newNode = malloc(sizeof(node));
     newNode->data = malloc(strlen(data));
     strcpy(newNode->data, data);
     newNode->next = NULL;
 
-    if (*head == NULL) {
+    if (*head == NULL)
+    {
         *head = newNode;
-    } else {
+    }
+    else
+    {
         node *current = *head;
-        while (current->next != NULL) {
+        while (current->next != NULL)
+        {
             current = current->next;
         }
         current->next = newNode;
     }
 }
 
-bool isOperator(char operator) {
-    switch (operator) {
-        case '+':
-            return true;
-        case '-':
-            return true;
-        case '*':
-            return true;
-        case '/':
-            return true;
+bool isOperator(char operator)
+{
+    switch (operator)
+    {
+    case '+':
+        return true;
+    case '-':
+        return true;
+    case '*':
+        return true;
+    case '/':
+        return true;
     }
 }
 
-int evaluate(int num1, char operator, int num2) {
-    switch (operator) {
-        case '+':
-            return num1 + num2;
-        case '-':
-            return num1 - num2;
-        case '*':
-            return num1 * num2;
-        case '/':
-            return num1 / num2;
+int evaluate(int num1, char operator, int num2)
+{
+    switch (operator)
+    {
+    case '+':
+        return num1 + num2;
+    case '-':
+        return num1 - num2;
+    case '*':
+        return num1 * num2;
+    case '/':
+        return num1 / num2;
     }
 }
 
-void postfixEvaluator(node *head) {
+void postfixEvaluator(node *head)
+{
     node *current = head;
-    while (current != NULL) {
-        if (isalnum(*current->data) || (current->data[0] == '-' && strlen(current->data) > 1)) {
+    while (current != NULL)
+    {
+        if (isalnum(*current->data) || (current->data[0] == '-' &&
+                                        strlen(current->data) > 1))
+        {
             int num = atoi(current->data);
             push(num);
-        } else if (isOperator(*current->data)) {
+        }
+        else if (isOperator(*current->data))
+        {
             int num2 = pop();
             int num1 = pop();
             push(evaluate(num1, *current->data, num2));
@@ -93,7 +119,8 @@ void postfixEvaluator(node *head) {
     printf("Output: %d\n", pop());
 }
 
-int main() {
+int main()
+{
     node *head = NULL;
     char input[MAX_SIZE];
     char tempString[MAX_SIZE];
@@ -103,12 +130,16 @@ int main() {
 
     int i = 0;
     int j = 0;
-    while (input[i] != '\0') {
-        if (isspace(input[i])) {
+    while (input[i] != '\0')
+    {
+        if (isspace(input[i]))
+        {
             tempString[j++] = '\0';
             addNode(&head, tempString);
             j = 0;
-        } else {
+        }
+        else
+        {
             tempString[j++] = input[i];
         }
         i++;
